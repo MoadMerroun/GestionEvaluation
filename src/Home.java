@@ -2,19 +2,26 @@ import java.awt.EventQueue;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextArea;
 
 public class Home {
-
+	Connection conn = DbConnection.connecterbd();
+	PreparedStatement ps = null;
+	ResultSet rs = null;
 	private JFrame frame;
 	private JLabel lblNewLabel;
 	private JLabel lblNewLabel_1;
+	JTextArea textArea;
 	private JPasswordField passwordField;
 	private JLabel lblNewLabel_3;
 
@@ -39,6 +46,7 @@ public class Home {
 	 */
 	public Home() {
 		initialize();
+		DbConnection.connecterbd();
 	}
 
 	/**
@@ -53,9 +61,21 @@ public class Home {
 		JButton btnNewButton = new JButton("Se connecter");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.dispose();
-				Tableau_bord tableau = new Tableau_bord();
-				tableau.setVisible(true);
+				String login = "SELECT * FROM admin WHERE Identifiant=? AND password=?";
+				try {
+					ps = conn.prepareStatement(login);
+					ps.setString(1, textArea.getText());
+					ps.setString(2, passwordField.getText());
+					rs = ps.executeQuery();
+					if (rs.next()) {
+						frame.dispose();
+						new Tableau_bord().setVisible(true);
+					} else {
+						JOptionPane.showMessageDialog(null, "Identifiant ou mot de passe sont incorrectes");
+					}
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, ex);
+				}
 			}
 		});
 		btnNewButton.setBounds(215, 307, 129, 23);
@@ -73,7 +93,7 @@ public class Home {
 		passwordField.setBounds(286, 254, 162, 20);
 		frame.getContentPane().add(passwordField);
 
-		JTextArea textArea = new JTextArea();
+		textArea = new JTextArea();
 		textArea.setBounds(286, 191, 162, 22);
 		frame.getContentPane().add(textArea);
 

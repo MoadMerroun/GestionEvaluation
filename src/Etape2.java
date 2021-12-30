@@ -4,6 +4,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -19,8 +23,11 @@ import javax.swing.border.EmptyBorder;
 import com.toedter.components.JSpinField;
 
 public class Etape2 extends JFrame {
-
+	JList list;
 	private JPanel contentPane;
+	Connection conn = DbConnection.connecterbd();
+	PreparedStatement ps = null;
+	ResultSet rs = null;
 
 	/**
 	 * Launch the application.
@@ -42,6 +49,7 @@ public class Etape2 extends JFrame {
 	 * Create the frame.
 	 */
 	public Etape2() {
+		DbConnection.connecterbd();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1060, 491);
 		contentPane = new JPanel();
@@ -77,7 +85,7 @@ public class Etape2 extends JFrame {
 		JButton btnNewButton = new JButton("Tableau de bord");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
+				dispose();
 				Tableau_bord tab = new Tableau_bord();
 				tab.setVisible(true);
 			}
@@ -120,11 +128,11 @@ public class Etape2 extends JFrame {
 					public void actionPerformed(ActionEvent e) {
 						Object selected = comboBox3.getSelectedItem();
 						if (selected.toString().equals("Voir affectation")) {
-							setVisible(false);
+							dispose();
 							Voir_affectation voir_aff = new Voir_affectation();
 							voir_aff.setVisible(true);
 						} else if (selected.toString().equals("Ajouter une affectation")) {
-							setVisible(false);
+							dispose();
 							Ajouter_affectation aj_aff = new Ajouter_affectation();
 							aj_aff.setVisible(true);
 						}
@@ -138,7 +146,7 @@ public class Etape2 extends JFrame {
 		JButton btnNewButton_3 = new JButton("Demande de consultation de copie");
 		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
+				dispose();
 				Demande_consultation_copie demande = new Demande_consultation_copie();
 				demande.setVisible(true);
 			}
@@ -149,7 +157,7 @@ public class Etape2 extends JFrame {
 		JButton btnNewButton_4 = new JButton("Messagerie");
 		btnNewButton_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
+				dispose();
 				Messagerie mssg = new Messagerie();
 				mssg.setVisible(true);
 			}
@@ -160,7 +168,7 @@ public class Etape2 extends JFrame {
 		JButton btnNewButton_5 = new JButton("PV annuel");
 		btnNewButton_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
+				dispose();
 				Pv_annuel pv = new Pv_annuel();
 				pv.setVisible(true);
 			}
@@ -171,7 +179,7 @@ public class Etape2 extends JFrame {
 		JButton btnNewButton1 = new JButton("Suivant");
 		btnNewButton1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
+				dispose();
 				Etape2 etape = new Etape2();
 				etape.setVisible(true);
 			}
@@ -190,7 +198,7 @@ public class Etape2 extends JFrame {
 				"Salle 204", "Salle 205", "Salle 206",
 		};
 
-		JList list = new JList(salles);
+		list = new JList(salles);
 		list.setBounds(159, 285, 70, 42);
 		contentPane.add(list);
 
@@ -203,13 +211,31 @@ public class Etape2 extends JFrame {
 		spinField.setMinimum(1);
 		spinField.setBounds(291, 229, 30, 20);
 		contentPane.add(spinField);
-
 		list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		JButton btnNewButton_6 = new JButton("Enregistrer");
 		btnNewButton_6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
+				String Salles = "";
+				for (int i : list.getSelectedIndices()) {
+					Salles = Salles + (String) list.getModel().getElementAt(i) + "|";
+				}
+				int nb_salles = (Integer) spinField.getValue();
+
+				String moduleIns2 = "UPDATE ajouter_affectation SET nb_salles='" + nb_salles + "',Salles='" + Salles
+						+ "' WHERE Module='" + Ajouter_affectation.module1 + "'";
+
+				try {
+					ps = conn.prepareStatement(moduleIns2);
+					ps.execute();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				dispose();
+				Etape2 etape = new Etape2();
+				etape.setVisible(true);
+				dispose();
 				Voir_affectation voir_aff = new Voir_affectation();
 				voir_aff.setVisible(true);
 			}
@@ -233,11 +259,11 @@ public class Etape2 extends JFrame {
 					public void actionPerformed(ActionEvent e) {
 						Object selected = comboBox4.getSelectedItem();
 						if (selected.toString().equals("Voir prevention examens")) {
-							setVisible(false);
+							dispose();
 							Voir_prevention_examens voir_prev = new Voir_prevention_examens();
 							voir_prev.setVisible(true);
 						} else if (selected.toString().equals("Planifier examens")) {
-							setVisible(false);
+							dispose();
 							Planifier_examens plan_exam = new Planifier_examens();
 							plan_exam.setVisible(true);
 						}

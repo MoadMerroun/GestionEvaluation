@@ -11,6 +11,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -44,7 +45,7 @@ public class Tableau_bord extends JFrame {
 	 */
 	public Tableau_bord() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1052, 517);
+		setBounds(100, 100, 1052, 594);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -78,7 +79,7 @@ public class Tableau_bord extends JFrame {
 		btnNewButton.setBounds(0, 141, 129, 23);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
+				dispose();
 				Tableau_bord tab = new Tableau_bord();
 				tab.setVisible(true);
 			}
@@ -120,11 +121,11 @@ public class Tableau_bord extends JFrame {
 					public void actionPerformed(ActionEvent e) {
 						Object selected = comboBox3.getSelectedItem();
 						if (selected.toString().equals("Voir affectation")) {
-							setVisible(false);
+							dispose();
 							Voir_affectation voir_aff = new Voir_affectation();
 							voir_aff.setVisible(true);
 						} else if (selected.toString().equals("Ajouter une affectation")) {
-							setVisible(false);
+							dispose();
 							Ajouter_affectation aj_aff = new Ajouter_affectation();
 							aj_aff.setVisible(true);
 						}
@@ -138,7 +139,7 @@ public class Tableau_bord extends JFrame {
 		btnNewButton_3.setBounds(435, 141, 235, 23);
 		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
+				dispose();
 				Demande_consultation_copie demande = new Demande_consultation_copie();
 				demande.setVisible(true);
 			}
@@ -149,7 +150,7 @@ public class Tableau_bord extends JFrame {
 		btnNewButton_4.setBounds(824, 141, 100, 23);
 		btnNewButton_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
+				dispose();
 				Messagerie mssg = new Messagerie();
 				mssg.setVisible(true);
 			}
@@ -160,7 +161,7 @@ public class Tableau_bord extends JFrame {
 		btnNewButton_5.setBounds(919, 141, 111, 23);
 		btnNewButton_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
+				dispose();
 				Pv_annuel pv = new Pv_annuel();
 				pv.setVisible(true);
 			}
@@ -183,11 +184,11 @@ public class Tableau_bord extends JFrame {
 					public void actionPerformed(ActionEvent e) {
 						Object selected = comboBox4.getSelectedItem();
 						if (selected.toString().equals("Voir prevention examens")) {
-							setVisible(false);
+							dispose();
 							Voir_prevention_examens voir_prev = new Voir_prevention_examens();
 							voir_prev.setVisible(true);
 						} else if (selected.toString().equals("Planifier examens")) {
-							setVisible(false);
+							dispose();
 							Planifier_examens plan_exam = new Planifier_examens();
 							plan_exam.setVisible(true);
 						}
@@ -203,13 +204,13 @@ public class Tableau_bord extends JFrame {
 		contentPane.add(lblNewLabel);
 
 		JLabel lblNewLabel_1 = new JLabel("Taux de pr\u00E9sence des \u00E9tudiants au niveau de l\u2019examen:");
-		lblNewLabel_1.setBounds(33, 346, 341, 35);
+		lblNewLabel_1.setBounds(22, 304, 341, 35);
 		contentPane.add(lblNewLabel_1);
 
 		String[] Filieres = { "2AP1", "2AP2", "GI1", "GC1", "SCM1", "GM1", "GSTR1", "GI2", "GC2", "SCM2", "GM2",
 				"GSTR2", "GI3", "GC3", "SCM3", "GM3", "GSTR3" };
 		JComboBox comboBox = new JComboBox(Filieres);
-		comboBox.setBounds(219, 408, 70, 23);
+		comboBox.setBounds(98, 348, 70, 23);
 		contentPane.add(comboBox);
 
 		String[] modules = { "Algèbre 1", " Analyse 1", " Physique 1", " Mécanique 1", " Informatique 1",
@@ -231,7 +232,7 @@ public class Tableau_bord extends JFrame {
 				"Business Intelligence", "Urbanisation des Systèmes d’Information", "Programmation des Systèmes",
 				"Technologies DotNet et JEE", "Langues et Communication III", "Management III" };
 		JComboBox comboBox_1 = new JComboBox(modules);
-		comboBox_1.setBounds(435, 407, 111, 25);
+		comboBox_1.setBounds(400, 347, 111, 25);
 		contentPane.add(comboBox_1);
 
 		String[] salles = { "Salle 001", "Salle 002", "Salle 003", "Salle 004", "Salle 005", "Salle 006", "Salle 101",
@@ -239,52 +240,56 @@ public class Tableau_bord extends JFrame {
 				"Salle 204", "Salle 205", "Salle 206",
 		};
 		JComboBox comboBox_2 = new JComboBox(salles);
-		comboBox_2.setBounds(699, 408, 126, 22);
+		comboBox_2.setBounds(754, 348, 126, 22);
 		contentPane.add(comboBox_2);
 
 		JLabel lblNewLabel_4 = new JLabel("Modules");
-		lblNewLabel_4.setBounds(320, 223, 140, 72);
+		lblNewLabel_4.setBounds(319, 202, 140, 72);
 		contentPane.add(lblNewLabel_4);
 
 		JLabel lblNewLabel_5 = new JLabel("Cadres p\u00E9dagogiques");
-		lblNewLabel_5.setBounds(531, 225, 190, 68);
+		lblNewLabel_5.setBounds(531, 204, 190, 68);
 		contentPane.add(lblNewLabel_5);
 
 		JLabel lblNewLabel_6 = new JLabel("Nombre des salles");
-		lblNewLabel_6.setBounds(824, 228, 190, 63);
+		lblNewLabel_6.setBounds(824, 207, 190, 63);
 		contentPane.add(lblNewLabel_6);
 
 		JLabel lblNewLabel_2 = new JLabel("Nombre des examens");
-		lblNewLabel_2.setBounds(64, 225, 140, 68);
+		lblNewLabel_2.setBounds(64, 204, 140, 68);
 		contentPane.add(lblNewLabel_2);
 
 		JSeparator separator = new JSeparator();
-		separator.setBounds(0, 333, 1050, 2);
+		separator.setBounds(0, 291, 1050, 2);
 		contentPane.add(separator);
 
 		textField = new JTextField();
-		textField.setBounds(98, 283, 31, 23);
+		textField.setBounds(98, 257, 31, 23);
 		textField.setText("3");
 		contentPane.add(textField);
 		textField.setColumns(10);
 
 		textField_1 = new JTextField();
-		textField_1.setBounds(331, 283, 31, 23);
+		textField_1.setBounds(329, 257, 31, 23);
 		textField_1.setText("8");
 		contentPane.add(textField_1);
 		textField_1.setColumns(10);
 
 		textField_2 = new JTextField();
-		textField_2.setBounds(563, 283, 42, 22);
+		textField_2.setBounds(565, 257, 42, 22);
 		textField_2.setText("3");
 		contentPane.add(textField_2);
 		textField_2.setColumns(10);
 
 		textField_3 = new JTextField();
-		textField_3.setBounds(864, 283, 31, 22);
+		textField_3.setBounds(849, 257, 31, 22);
 		textField_3.setText("7");
 		contentPane.add(textField_3);
 		textField_3.setColumns(10);
+
+		JProgressBar progressBar = new JProgressBar();
+		progressBar.setBounds(355, 451, 241, 47);
+		contentPane.add(progressBar);
 
 	}
 }

@@ -4,21 +4,46 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 import com.toedter.calendar.JDateChooser;
 import com.toedter.components.JSpinField;
 
 public class Ajouter_affectation extends JFrame {
-
+	Connection conn = DbConnection.connecterbd();
+	PreparedStatement ps = null;
+	ResultSet rs = null;
 	private JPanel contentPane;
+	private JTextField textField;
+	java.sql.Date DateExam;
+	int heure_fin;
+	int heure_debut;
+	static String module1;
+	String prof;
+	String surve1;
+	String surve2;
+	JDateChooser dateChooser;
+	java.util.Date d;
+	JComboBox comboBox_0;
+	JComboBox comboBox_2;
+	JComboBox comboBox_3;
+	JSpinField spinField_1;
+	JSpinField spinField;
 
 	/**
 	 * Launch the application.
@@ -40,6 +65,7 @@ public class Ajouter_affectation extends JFrame {
 	 * Create the frame.
 	 */
 	public Ajouter_affectation() {
+		DbConnection.connecterbd();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1059, 487);
 		contentPane = new JPanel();
@@ -76,7 +102,7 @@ public class Ajouter_affectation extends JFrame {
 		JButton btnNewButton = new JButton("Tableau de bord");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
+				dispose();
 				Tableau_bord tab = new Tableau_bord();
 				tab.setVisible(true);
 			}
@@ -119,11 +145,11 @@ public class Ajouter_affectation extends JFrame {
 					public void actionPerformed(ActionEvent e) {
 						Object selected = comboBox3.getSelectedItem();
 						if (selected.toString().equals("Voir affectation")) {
-							setVisible(false);
+							dispose();
 							Voir_affectation voir_aff = new Voir_affectation();
 							voir_aff.setVisible(true);
 						} else if (selected.toString().equals("Ajouter une affectation")) {
-							setVisible(false);
+							dispose();
 							Ajouter_affectation aj_aff = new Ajouter_affectation();
 							aj_aff.setVisible(true);
 						}
@@ -137,7 +163,7 @@ public class Ajouter_affectation extends JFrame {
 		JButton btnNewButton_3 = new JButton("Demande de consultation de copie");
 		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
+				dispose();
 				Demande_consultation_copie demande = new Demande_consultation_copie();
 				demande.setVisible(true);
 			}
@@ -148,7 +174,7 @@ public class Ajouter_affectation extends JFrame {
 		JButton btnNewButton_4 = new JButton("Messagerie");
 		btnNewButton_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
+				dispose();
 				Messagerie mssg = new Messagerie();
 				mssg.setVisible(true);
 			}
@@ -159,7 +185,7 @@ public class Ajouter_affectation extends JFrame {
 		JButton btnNewButton_5 = new JButton("PV annuel");
 		btnNewButton_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
+				dispose();
 				Pv_annuel pv = new Pv_annuel();
 				pv.setVisible(true);
 			}
@@ -198,7 +224,25 @@ public class Ajouter_affectation extends JFrame {
 		JButton btnNewButton1 = new JButton("Suivant");
 		btnNewButton1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
+				d = dateChooser.getDate();
+				DateExam = new java.sql.Date(d.getTime());
+				module1 = comboBox_0.getSelectedItem().toString();
+				prof = textField.getText();
+				surve1 = comboBox_2.getSelectedItem().toString();
+				surve2 = comboBox_3.getSelectedItem().toString();
+				heure_debut = (Integer) spinField_1.getValue();
+				heure_fin = (Integer) spinField.getValue();
+				String moduleIns = "INSERT INTO ajouter_affectation(Module, Prof, Surveillant1, Surveillant2, Date_exam, heure_debut, heure_fin) VALUES ('"
+						+ module1 + "','" + prof + "','" + surve1 + "','" + surve2 + "','" + DateExam + "','"
+						+ heure_debut + "','" + heure_fin + "')";
+				try {
+
+					ps.executeUpdate(moduleIns);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				dispose();
 				Etape2 etape = new Etape2();
 				etape.setVisible(true);
 			}
@@ -206,51 +250,93 @@ public class Ajouter_affectation extends JFrame {
 		btnNewButton1.setBounds(938, 413, 90, 28);
 		contentPane.add(btnNewButton1);
 
-		String[] modules = { "Algèbre 1", " Analyse 1", " Physique 1", " Mécanique 1", " Informatique 1",
-				" Langue et Communication 1", " Algèbre 2", " Analyse 2", " Physique 2", " Chimie",
-				" Mathématiques Assistées par Ordinateur (MAO)", " Langue et Communication 2", " Algèbre 3",
-				" Analyse 3", " Physique 3", " Mécanique 2", " Informatique 2", " Langue et Communication 3",
-				" Analyse 4", " Mathématiques Appliquées", " Physique 4", " Electronique", " Management",
-				" Langue et Communication 4", "Langues et Communication I", "Management I",
-				"Probabilités, Statistiques et Calcul Stochastique", "Réseaux Informatiques I",
-				"Systèmes d’Information et Bases de Données Relationnelles",
-				"Théories des Graphes et Recherche Opérationnelle", "Électronique Numérique", "Programmation Web I",
-				"Programmation C Avancé et Complexité", "Systèmes d’exploitation",
-				"Théories des Langages et Compilation", "Architecture des Ordinateurs et Assembleur",
-				"Modélisation et Programmation Objet", "Programmation Réseaux et Sécurité Informatique",
-				"Réseaux informatique II", "Méthodologies et Génie Logiciel", "Langues et Communication II",
-				"Management II", "Intelligence Artificielle", "Administration et Optimisation des BD",
-				"Programmation web II", "Java Avancé", "Vision Artificielle",
-				"Base de Données Relationnelle-Objet et Répartie", "Système d’Intégration et Progiciel",
-				"Business Intelligence", "Urbanisation des Systèmes d’Information", "Programmation des Systèmes",
-				"Technologies DotNet et JEE", "Langues et Communication III", "Management III" };
+		comboBox_0 = new JComboBox();
+		comboBox_0.addPopupMenuListener(new PopupMenuListener() {
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+				try {
+					String prof = "SELECT * FROM module inner join enseignant on CIN=CIN_enseignant WHERE nom_module=?";
+					ps = conn.prepareStatement(prof);
+					ps.setString(1, comboBox_0.getSelectedItem().toString());
+					rs = ps.executeQuery();
+					if (rs.next()) {
+						textField.setText(rs.getString("Identifiant"));
+					}
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, ex);
+				}
+			}
 
-		JComboBox comboBox_0 = new JComboBox(modules);
-		comboBox_0.setBounds(333, 233, 111, 25);
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+		comboBox_0.setBounds(298, 233, 146, 37);
 		contentPane.add(comboBox_0);
 
-		String[] profs = { "Besri zineb", "Noureddine OUKASS", "Mohamed CHKOURI" };
-		JComboBox comboBox_1 = new JComboBox(profs);
-		comboBox_1.setBounds(298, 303, 146, 31);
-		contentPane.add(comboBox_1);
+		String module = "SELECT nom_module FROM module";
+		try {
+			ps = conn.prepareStatement(module);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				comboBox_0.addItem(rs.getString("nom_module"));
+			}
+		} catch (Exception ex) {
+			JOptionPane.showMessageDialog(null, ex);
+		}
 
-		JComboBox comboBox_2 = new JComboBox(profs);
+		textField = new JTextField();
+		textField.setBounds(298, 298, 146, 40);
+		contentPane.add(textField);
+		textField.setColumns(10);
+		textField.setEditable(false);
+
+		comboBox_2 = new JComboBox();
 		comboBox_2.setBounds(298, 360, 146, 37);
 		contentPane.add(comboBox_2);
 
-		JComboBox comboBox_3 = new JComboBox(profs);
+		String surv1 = "SELECT Identifiant FROM enseignant";
+		try {
+			ps = conn.prepareStatement(surv1);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				comboBox_2.addItem(rs.getString("Identifiant"));
+			}
+		} catch (Exception ex) {
+			JOptionPane.showMessageDialog(null, ex);
+		}
+
+		comboBox_3 = new JComboBox();
 		comboBox_3.setBounds(777, 227, 146, 37);
 		contentPane.add(comboBox_3);
 
-		JDateChooser dateChooser = new JDateChooser();
+		String surv2 = "SELECT Identifiant FROM enseignant";
+		try {
+			ps = conn.prepareStatement(surv2);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				comboBox_3.addItem(rs.getString("Identifiant"));
+			}
+		} catch (Exception ex) {
+			JOptionPane.showMessageDialog(null, ex);
+		}
+
+		dateChooser = new JDateChooser();
 		dateChooser.setBounds(853, 303, 70, 31);
 		contentPane.add(dateChooser);
 
-		JSpinField spinField_1 = new JSpinField(0, 23);
+		spinField_1 = new JSpinField(0, 23);
 		spinField_1.setBounds(791, 374, 30, 20);
 		contentPane.add(spinField_1);
 
-		JSpinField spinField = new JSpinField(0, 23);
+		spinField = new JSpinField(0, 23);
 		spinField.setBounds(571, 374, 30, 20);
 		contentPane.add(spinField);
 
@@ -270,11 +356,11 @@ public class Ajouter_affectation extends JFrame {
 					public void actionPerformed(ActionEvent e) {
 						Object selected = comboBox4.getSelectedItem();
 						if (selected.toString().equals("Voir prevention examens")) {
-							setVisible(false);
+							dispose();
 							Voir_prevention_examens voir_prev = new Voir_prevention_examens();
 							voir_prev.setVisible(true);
 						} else if (selected.toString().equals("Planifier examens")) {
-							setVisible(false);
+							dispose();
 							Planifier_examens plan_exam = new Planifier_examens();
 							plan_exam.setVisible(true);
 						}
