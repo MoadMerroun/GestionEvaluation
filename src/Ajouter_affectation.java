@@ -103,8 +103,7 @@ public class Ajouter_affectation extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Tableau_bord tab = new Tableau_bord();
-				tab.setVisible(true);
+				new Tableau_bord().setVisible(true);
 			}
 		});
 		btnNewButton.setBounds(0, 113, 129, 23);
@@ -146,12 +145,10 @@ public class Ajouter_affectation extends JFrame {
 						Object selected = comboBox3.getSelectedItem();
 						if (selected.toString().equals("Voir affectation")) {
 							dispose();
-							Voir_affectation voir_aff = new Voir_affectation();
-							voir_aff.setVisible(true);
+							new Voir_affectation().setVisible(true);
 						} else if (selected.toString().equals("Ajouter une affectation")) {
 							dispose();
-							Ajouter_affectation aj_aff = new Ajouter_affectation();
-							aj_aff.setVisible(true);
+							new Ajouter_affectation().setVisible(true);
 						}
 					}
 				});
@@ -164,8 +161,7 @@ public class Ajouter_affectation extends JFrame {
 		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Demande_consultation_copie demande = new Demande_consultation_copie();
-				demande.setVisible(true);
+				new Demande_consultation_copie().setVisible(true);
 			}
 		});
 		btnNewButton_3.setBounds(439, 113, 242, 23);
@@ -175,8 +171,7 @@ public class Ajouter_affectation extends JFrame {
 		btnNewButton_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Messagerie mssg = new Messagerie();
-				mssg.setVisible(true);
+				new Messagerie().setVisible(true);
 			}
 		});
 		btnNewButton_4.setBounds(839, 113, 100, 23);
@@ -186,8 +181,7 @@ public class Ajouter_affectation extends JFrame {
 		btnNewButton_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Pv_annuel pv = new Pv_annuel();
-				pv.setVisible(true);
+				new Pv_annuel().setVisible(true);
 			}
 		});
 		btnNewButton_5.setBounds(938, 113, 111, 23);
@@ -230,8 +224,8 @@ public class Ajouter_affectation extends JFrame {
 				prof = textField.getText();
 				surve1 = comboBox_2.getSelectedItem().toString();
 				surve2 = comboBox_3.getSelectedItem().toString();
-				heure_debut = (Integer) spinField_1.getValue();
-				heure_fin = (Integer) spinField.getValue();
+				heure_fin = (Integer) spinField_1.getValue();
+				heure_debut = (Integer) spinField.getValue();
 				String moduleIns = "INSERT INTO ajouter_affectation(Module, Prof, Surveillant1, Surveillant2, Date_exam, heure_debut, heure_fin) VALUES ('"
 						+ module1 + "','" + prof + "','" + surve1 + "','" + surve2 + "','" + DateExam + "','"
 						+ heure_debut + "','" + heure_fin + "')";
@@ -243,8 +237,7 @@ public class Ajouter_affectation extends JFrame {
 					e1.printStackTrace();
 				}
 				dispose();
-				Etape2 etape = new Etape2();
-				etape.setVisible(true);
+				new Etape2().setVisible(true);
 			}
 		});
 		btnNewButton1.setBounds(938, 413, 90, 28);
@@ -343,7 +336,7 @@ public class Ajouter_affectation extends JFrame {
 		JButton btnNewButton_6 = new JButton("Gestion des examens");
 
 		JComboBox comboBox4;
-		String[] exams = { "Voir prevention examens", "Planifier examens" };
+		String[] exams = { "Planifier examens" };
 		comboBox4 = new JComboBox(exams);
 
 		btnNewButton_6.addMouseListener(new MouseAdapter() {
@@ -357,12 +350,10 @@ public class Ajouter_affectation extends JFrame {
 						Object selected = comboBox4.getSelectedItem();
 						if (selected.toString().equals("Voir prevention examens")) {
 							dispose();
-							Voir_prevention_examens voir_prev = new Voir_prevention_examens();
-							voir_prev.setVisible(true);
+							new Voir_prevention_examens().setVisible(true);
 						} else if (selected.toString().equals("Planifier examens")) {
 							dispose();
-							Planifier_examens plan_exam = new Planifier_examens();
-							plan_exam.setVisible(true);
+							new Planifier_examens().setVisible(true);
 						}
 					}
 				});

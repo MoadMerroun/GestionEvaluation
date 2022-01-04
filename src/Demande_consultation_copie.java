@@ -4,6 +4,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -14,9 +18,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 public class Demande_consultation_copie extends JFrame {
-
+	Connection conn = DbConnection.connecterbd();
+	PreparedStatement ps = null;
+	ResultSet rs = null;
 	private JPanel contentPane;
 	private JTable table;
 
@@ -76,8 +83,7 @@ public class Demande_consultation_copie extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Tableau_bord tab = new Tableau_bord();
-				tab.setVisible(true);
+				new Tableau_bord().setVisible(true);
 			}
 		});
 		btnNewButton.setBounds(0, 113, 129, 23);
@@ -118,12 +124,10 @@ public class Demande_consultation_copie extends JFrame {
 						Object selected = comboBox3.getSelectedItem();
 						if (selected.toString().equals("Voir affectation")) {
 							dispose();
-							Voir_affectation voir_aff = new Voir_affectation();
-							voir_aff.setVisible(true);
+							new Voir_affectation().setVisible(true);
 						} else if (selected.toString().equals("Ajouter une affectation")) {
 							dispose();
-							Ajouter_affectation aj_aff = new Ajouter_affectation();
-							aj_aff.setVisible(true);
+							new Ajouter_affectation().setVisible(true);
 						}
 					}
 				});
@@ -136,8 +140,7 @@ public class Demande_consultation_copie extends JFrame {
 		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Demande_consultation_copie demande = new Demande_consultation_copie();
-				demande.setVisible(true);
+				new Demande_consultation_copie().setVisible(true);
 			}
 		});
 		btnNewButton_3.setBounds(439, 113, 249, 23);
@@ -147,8 +150,7 @@ public class Demande_consultation_copie extends JFrame {
 		btnNewButton_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Messagerie mssg = new Messagerie();
-				mssg.setVisible(true);
+				new Messagerie().setVisible(true);
 			}
 		});
 		btnNewButton_4.setBounds(860, 113, 100, 23);
@@ -158,31 +160,41 @@ public class Demande_consultation_copie extends JFrame {
 		btnNewButton_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Pv_annuel pv = new Pv_annuel();
-				pv.setVisible(true);
+				new Pv_annuel().setVisible(true);
 			}
 		});
 		btnNewButton_5.setBounds(958, 113, 111, 23);
 		contentPane.add(btnNewButton_5);
 
-		JLabel lblNewLabel = new JLabel("Filiere :");
-		lblNewLabel.setBounds(80, 187, 72, 36);
-		contentPane.add(lblNewLabel);
+		table = new JTable();
+		DefaultTableModel model = new DefaultTableModel();
+		model.addColumn("Module");
+		model.addColumn("Apoge");
+		model.addColumn("EmailEtudiant");
+		model.addColumn("Message");
 
-		String[] Filieres = { "2AP1", "2AP2", "GI1", "GC1", "SCM1", "GM1", "GSTR1", "GI2", "GC2", "SCM2", "GM2",
-				"GSTR2", "GI3", "GC3", "SCM3", "GM3", "GSTR3" };
-		JComboBox comboBox = new JComboBox(Filieres);
-		comboBox.setBounds(137, 194, 70, 23);
-		contentPane.add(comboBox);
+		String sql = "SELECT * FROM demandesconsultationcopie";
+		try {
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				model.addRow(new Object[] {
+						rs.getString("Module"),
+						rs.getString("Apoge"),
+						rs.getString("EmailEtudiant"),
+						rs.getString("Message")
+				});
+				table.setModel(model);
+				// table.setAutoResizeMode(0);
+				table.getColumnModel().getColumn(0);
+				table.getColumnModel().getColumn(1);
+				table.getColumnModel().getColumn(2);
+				table.getColumnModel().getColumn(3);
+			}
 
-		String column[] = { "Module (ou élément du module)", "Numéro apogée", "Message", "Réponse du professeur" };
-
-		String data[][] = {
-				{ "Modélisation UML et POO", "18325860", "Demande de consultation de copie", "Acceptation" },
-				{ "Algèbre 1", "1856890", "Demande de consultation de copie", "Refus" }
-		};
-
-		table = new JTable(data, column);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
 		JScrollPane scrollPane1 = new JScrollPane(table);
 		scrollPane1.setBounds(0, 262, 1069, 57);
 		contentPane.add(scrollPane1);
@@ -190,7 +202,7 @@ public class Demande_consultation_copie extends JFrame {
 		JButton btnNewButton_7 = new JButton("Gestion des examens");
 
 		JComboBox comboBox4;
-		String[] exams = { "Voir prevention examens", "Planifier examens" };
+		String[] exams = { "Planifier examens" };
 		comboBox4 = new JComboBox(exams);
 
 		btnNewButton_7.addMouseListener(new MouseAdapter() {
@@ -204,12 +216,10 @@ public class Demande_consultation_copie extends JFrame {
 						Object selected = comboBox4.getSelectedItem();
 						if (selected.toString().equals("Voir prevention examens")) {
 							dispose();
-							Voir_prevention_examens voir_prev = new Voir_prevention_examens();
-							voir_prev.setVisible(true);
+							new Voir_prevention_examens().setVisible(true);
 						} else if (selected.toString().equals("Planifier examens")) {
 							dispose();
-							Planifier_examens plan_exam = new Planifier_examens();
-							plan_exam.setVisible(true);
+							new Planifier_examens().setVisible(true);
 						}
 					}
 				});

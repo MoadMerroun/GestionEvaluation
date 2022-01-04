@@ -1,28 +1,94 @@
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JSeparator;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 public class Tableau_bord extends JFrame {
-
+	Connection conn = DbConnection.connecterbd();
+	PreparedStatement ps = null;
+	ResultSet rs = null;
 	private JPanel contentPane;
-	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTextField textField_3;
+	private JTextField textField;
+
+	public void afficherNbExamens() {
+		int c;
+		String login = "SELECT count(Module) FROM ajouter_affectation";
+		try {
+			ps = conn.prepareStatement(login);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				textField.setText(rs.getString("count(Module)"));
+			}
+
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e);
+		}
+	}
+
+	public void afficherNbModules() {
+		int c;
+		String login = "SELECT count(ID) FROM module";
+		try {
+			ps = conn.prepareStatement(login);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				textField_1.setText(rs.getString("count(ID)"));
+			}
+
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e);
+		}
+	}
+
+	public void afficherNbProf() {
+		int c;
+		String login = "SELECT count(CIN) FROM enseignant";
+		try {
+			ps = conn.prepareStatement(login);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				textField_2.setText(rs.getString("count(CIN)"));
+			}
+
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e);
+		}
+	}
+
+	public void afficherNbSalles() {
+		int c;
+		String login = "SELECT count(Id) FROM salles";
+		try {
+			ps = conn.prepareStatement(login);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				textField_3.setText(rs.getString("count(Id)"));
+			}
+
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e);
+		}
+	}
 
 	/**
 	 * Launch the application.
@@ -80,8 +146,7 @@ public class Tableau_bord extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Tableau_bord tab = new Tableau_bord();
-				tab.setVisible(true);
+				new Tableau_bord().setVisible(true);
 			}
 		});
 		contentPane.add(btnNewButton);
@@ -122,12 +187,10 @@ public class Tableau_bord extends JFrame {
 						Object selected = comboBox3.getSelectedItem();
 						if (selected.toString().equals("Voir affectation")) {
 							dispose();
-							Voir_affectation voir_aff = new Voir_affectation();
-							voir_aff.setVisible(true);
+							new Voir_affectation().setVisible(true);
 						} else if (selected.toString().equals("Ajouter une affectation")) {
 							dispose();
-							Ajouter_affectation aj_aff = new Ajouter_affectation();
-							aj_aff.setVisible(true);
+							new Ajouter_affectation().setVisible(true);
 						}
 					}
 				});
@@ -140,8 +203,7 @@ public class Tableau_bord extends JFrame {
 		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Demande_consultation_copie demande = new Demande_consultation_copie();
-				demande.setVisible(true);
+				new Demande_consultation_copie().setVisible(true);
 			}
 		});
 		contentPane.add(btnNewButton_3);
@@ -151,8 +213,7 @@ public class Tableau_bord extends JFrame {
 		btnNewButton_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Messagerie mssg = new Messagerie();
-				mssg.setVisible(true);
+				new Messagerie().setVisible(true);
 			}
 		});
 		contentPane.add(btnNewButton_4);
@@ -162,8 +223,7 @@ public class Tableau_bord extends JFrame {
 		btnNewButton_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Pv_annuel pv = new Pv_annuel();
-				pv.setVisible(true);
+				new Pv_annuel().setVisible(true);
 			}
 		});
 		contentPane.add(btnNewButton_5);
@@ -171,7 +231,7 @@ public class Tableau_bord extends JFrame {
 		JButton btnNewButton_6 = new JButton("Gestion des examens");
 
 		JComboBox comboBox4;
-		String[] exams = { "Voir prevention examens", "Planifier examens" };
+		String[] exams = { "Planifier examens" };
 		comboBox4 = new JComboBox(exams);
 
 		btnNewButton_6.addMouseListener(new MouseAdapter() {
@@ -185,12 +245,10 @@ public class Tableau_bord extends JFrame {
 						Object selected = comboBox4.getSelectedItem();
 						if (selected.toString().equals("Voir prevention examens")) {
 							dispose();
-							Voir_prevention_examens voir_prev = new Voir_prevention_examens();
-							voir_prev.setVisible(true);
+							new Voir_prevention_examens().setVisible(true);
 						} else if (selected.toString().equals("Planifier examens")) {
 							dispose();
-							Planifier_examens plan_exam = new Planifier_examens();
-							plan_exam.setVisible(true);
+							new Planifier_examens().setVisible(true);
 						}
 					}
 				});
@@ -200,18 +258,12 @@ public class Tableau_bord extends JFrame {
 		btnNewButton_6.setBounds(668, 141, 159, 23);
 
 		JLabel lblNewLabel = new JLabel("Tableau de bord");
-		lblNewLabel.setBounds(22, 191, 132, 23);
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
+		lblNewLabel.setBounds(22, 191, 237, 68);
 		contentPane.add(lblNewLabel);
-
-		JLabel lblNewLabel_1 = new JLabel("Taux de pr\u00E9sence des \u00E9tudiants au niveau de l\u2019examen:");
-		lblNewLabel_1.setBounds(22, 304, 341, 35);
-		contentPane.add(lblNewLabel_1);
 
 		String[] Filieres = { "2AP1", "2AP2", "GI1", "GC1", "SCM1", "GM1", "GSTR1", "GI2", "GC2", "SCM2", "GM2",
 				"GSTR2", "GI3", "GC3", "SCM3", "GM3", "GSTR3" };
-		JComboBox comboBox = new JComboBox(Filieres);
-		comboBox.setBounds(98, 348, 70, 23);
-		contentPane.add(comboBox);
 
 		String[] modules = { "Algèbre 1", " Analyse 1", " Physique 1", " Mécanique 1", " Informatique 1",
 				" Langue et Communication 1", " Algèbre 2", " Analyse 2", " Physique 2", " Chimie",
@@ -231,65 +283,62 @@ public class Tableau_bord extends JFrame {
 				"Base de Données Relationnelle-Objet et Répartie", "Système d’Intégration et Progiciel",
 				"Business Intelligence", "Urbanisation des Systèmes d’Information", "Programmation des Systèmes",
 				"Technologies DotNet et JEE", "Langues et Communication III", "Management III" };
-		JComboBox comboBox_1 = new JComboBox(modules);
-		comboBox_1.setBounds(400, 347, 111, 25);
-		contentPane.add(comboBox_1);
 
 		String[] salles = { "Salle 001", "Salle 002", "Salle 003", "Salle 004", "Salle 005", "Salle 006", "Salle 101",
 				"Salle 102", "Salle 103", "Salle 104", "Salle 105", "Salle 106", "Salle 201", "Salle 202", "Salle 203",
 				"Salle 204", "Salle 205", "Salle 206",
 		};
-		JComboBox comboBox_2 = new JComboBox(salles);
-		comboBox_2.setBounds(754, 348, 126, 22);
-		contentPane.add(comboBox_2);
 
 		JLabel lblNewLabel_4 = new JLabel("Modules");
-		lblNewLabel_4.setBounds(319, 202, 140, 72);
+		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 18));
+		lblNewLabel_4.setBounds(330, 277, 84, 72);
 		contentPane.add(lblNewLabel_4);
 
 		JLabel lblNewLabel_5 = new JLabel("Cadres p\u00E9dagogiques");
-		lblNewLabel_5.setBounds(531, 204, 190, 68);
+		lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 18));
+		lblNewLabel_5.setBounds(517, 279, 202, 68);
 		contentPane.add(lblNewLabel_5);
 
 		JLabel lblNewLabel_6 = new JLabel("Nombre des salles");
-		lblNewLabel_6.setBounds(824, 207, 190, 63);
+		lblNewLabel_6.setFont(new Font("Tahoma", Font.BOLD, 18));
+		lblNewLabel_6.setBounds(797, 286, 190, 63);
 		contentPane.add(lblNewLabel_6);
 
 		JLabel lblNewLabel_2 = new JLabel("Nombre des examens");
-		lblNewLabel_2.setBounds(64, 204, 140, 68);
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 18));
+		lblNewLabel_2.setBounds(22, 270, 208, 86);
 		contentPane.add(lblNewLabel_2);
 
-		JSeparator separator = new JSeparator();
-		separator.setBounds(0, 291, 1050, 2);
-		contentPane.add(separator);
-
-		textField = new JTextField();
-		textField.setBounds(98, 257, 31, 23);
-		textField.setText("3");
-		contentPane.add(textField);
-		textField.setColumns(10);
-
 		textField_1 = new JTextField();
-		textField_1.setBounds(329, 257, 31, 23);
+		textField_1.setHorizontalAlignment(SwingConstants.CENTER);
+		textField_1.setBounds(329, 360, 69, 51);
 		textField_1.setText("8");
 		contentPane.add(textField_1);
 		textField_1.setColumns(10);
 
 		textField_2 = new JTextField();
-		textField_2.setBounds(565, 257, 42, 22);
+		textField_2.setHorizontalAlignment(SwingConstants.CENTER);
+		textField_2.setBounds(588, 360, 63, 51);
 		textField_2.setText("3");
 		contentPane.add(textField_2);
 		textField_2.setColumns(10);
 
 		textField_3 = new JTextField();
-		textField_3.setBounds(849, 257, 31, 22);
+		textField_3.setHorizontalAlignment(SwingConstants.CENTER);
+		textField_3.setBounds(850, 360, 63, 51);
 		textField_3.setText("7");
 		contentPane.add(textField_3);
 		textField_3.setColumns(10);
 
-		JProgressBar progressBar = new JProgressBar();
-		progressBar.setBounds(355, 451, 241, 47);
-		contentPane.add(progressBar);
+		textField = new JTextField();
+		textField.setHorizontalAlignment(SwingConstants.CENTER);
+		textField.setBounds(73, 360, 69, 52);
+		contentPane.add(textField);
+		textField.setColumns(10);
+		afficherNbExamens();
+		afficherNbModules();
+		afficherNbProf();
+		afficherNbSalles();
 
 	}
 }

@@ -74,8 +74,7 @@ public class Messagerie extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Tableau_bord tab = new Tableau_bord();
-				tab.setVisible(true);
+				new Tableau_bord().setVisible(true);
 			}
 		});
 		btnNewButton.setBounds(0, 113, 129, 23);
@@ -116,12 +115,10 @@ public class Messagerie extends JFrame {
 						Object selected = comboBox3.getSelectedItem();
 						if (selected.toString().equals("Voir affectation")) {
 							dispose();
-							Voir_affectation voir_aff = new Voir_affectation();
-							voir_aff.setVisible(true);
+							new Voir_affectation().setVisible(true);
 						} else if (selected.toString().equals("Ajouter une affectation")) {
 							dispose();
-							Ajouter_affectation aj_aff = new Ajouter_affectation();
-							aj_aff.setVisible(true);
+							new Ajouter_affectation().setVisible(true);
 						}
 					}
 				});
@@ -134,8 +131,7 @@ public class Messagerie extends JFrame {
 		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Demande_consultation_copie demande = new Demande_consultation_copie();
-				demande.setVisible(true);
+				new Demande_consultation_copie().setVisible(true);
 			}
 		});
 		btnNewButton_3.setBounds(439, 113, 249, 23);
@@ -145,8 +141,7 @@ public class Messagerie extends JFrame {
 		btnNewButton_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Messagerie mssg = new Messagerie();
-				mssg.setVisible(true);
+				new Messagerie().setVisible(true);
 			}
 		});
 		btnNewButton_4.setBounds(843, 113, 100, 23);
@@ -156,8 +151,7 @@ public class Messagerie extends JFrame {
 		btnNewButton_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Pv_annuel pv = new Pv_annuel();
-				pv.setVisible(true);
+				new Pv_annuel().setVisible(true);
 			}
 		});
 		btnNewButton_5.setBounds(940, 113, 111, 23);
@@ -181,8 +175,7 @@ public class Messagerie extends JFrame {
 		btnNewButton_6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Tableau_bord tab = new Tableau_bord();
-				tab.setVisible(true);
+				new Tableau_bord().setVisible(true);
 			}
 		});
 		btnNewButton_6.setBounds(507, 389, 89, 23);
@@ -195,7 +188,7 @@ public class Messagerie extends JFrame {
 		JButton btnNewButton_7 = new JButton("Gestion des examens");
 
 		JComboBox comboBox4;
-		String[] exams = { "Voir prevention examens", "Planifier examens" };
+		String[] exams = { "Planifier examens" };
 		comboBox4 = new JComboBox(exams);
 
 		btnNewButton_7.addMouseListener(new MouseAdapter() {
@@ -209,12 +202,10 @@ public class Messagerie extends JFrame {
 						Object selected = comboBox4.getSelectedItem();
 						if (selected.toString().equals("Voir prevention examens")) {
 							dispose();
-							Voir_prevention_examens voir_prev = new Voir_prevention_examens();
-							voir_prev.setVisible(true);
+							new Voir_prevention_examens().setVisible(true);
 						} else if (selected.toString().equals("Planifier examens")) {
 							dispose();
-							Planifier_examens plan_exam = new Planifier_examens();
-							plan_exam.setVisible(true);
+							new Planifier_examens().setVisible(true);
 						}
 					}
 				});

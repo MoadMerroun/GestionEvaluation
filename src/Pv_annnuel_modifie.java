@@ -199,7 +199,7 @@ public class Pv_annnuel_modifie extends JFrame {
 		JButton btnNewButton_9 = new JButton("Gestion des examens");
 
 		JComboBox comboBox4;
-		String[] exams = { "Voir prevention examens", "Planifier examens" };
+		String[] exams = { "Planifier examens" };
 		comboBox4 = new JComboBox(exams);
 
 		btnNewButton_9.addMouseListener(new MouseAdapter() {

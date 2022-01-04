@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -26,9 +27,9 @@ public class Planifier_examens extends JFrame {
 	private JTextField textField_3;
 	private JTextField textField_4;
 	private JTextField textField_5;
-	private JTextField textField_6;
-	private JTextField textField_7;
-	private JTextField textField_8;
+	private JTextField txtTp;
+	private JTextField txtTp_1;
+	private JTextField txtTp_2;
 
 	/**
 	 * Launch the application.
@@ -83,8 +84,7 @@ public class Planifier_examens extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Tableau_bord tab = new Tableau_bord();
-				tab.setVisible(true);
+				new Tableau_bord().setVisible(true);
 			}
 		});
 		btnNewButton.setBounds(0, 113, 129, 23);
@@ -125,12 +125,10 @@ public class Planifier_examens extends JFrame {
 						Object selected = comboBox3.getSelectedItem();
 						if (selected.toString().equals("Voir affectation")) {
 							dispose();
-							Voir_affectation voir_aff = new Voir_affectation();
-							voir_aff.setVisible(true);
+							new Voir_affectation().setVisible(true);
 						} else if (selected.toString().equals("Ajouter une affectation")) {
 							dispose();
-							Ajouter_affectation aj_aff = new Ajouter_affectation();
-							aj_aff.setVisible(true);
+							new Ajouter_affectation().setVisible(true);
 						}
 					}
 				});
@@ -143,8 +141,7 @@ public class Planifier_examens extends JFrame {
 		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Demande_consultation_copie demande = new Demande_consultation_copie();
-				demande.setVisible(true);
+				new Demande_consultation_copie().setVisible(true);
 			}
 		});
 		btnNewButton_3.setBounds(439, 113, 249, 23);
@@ -154,8 +151,7 @@ public class Planifier_examens extends JFrame {
 		btnNewButton_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Messagerie mssg = new Messagerie();
-				mssg.setVisible(true);
+				new Messagerie().setVisible(true);
 			}
 		});
 		btnNewButton_4.setBounds(852, 113, 100, 23);
@@ -165,8 +161,7 @@ public class Planifier_examens extends JFrame {
 		btnNewButton_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Pv_annuel pv = new Pv_annuel();
-				pv.setVisible(true);
+				new Pv_annuel().setVisible(true);
 			}
 		});
 		btnNewButton_5.setBounds(950, 113, 111, 23);
@@ -175,7 +170,7 @@ public class Planifier_examens extends JFrame {
 		JButton btnNewButton_9 = new JButton("Gestion des examens");
 
 		JComboBox comboBox4;
-		String[] exams = { "Voir prevention examens", "Planifier examens" };
+		String[] exams = { "Planifier examens" };
 		comboBox4 = new JComboBox(exams);
 
 		btnNewButton_9.addMouseListener(new MouseAdapter() {
@@ -189,12 +184,10 @@ public class Planifier_examens extends JFrame {
 						Object selected = comboBox4.getSelectedItem();
 						if (selected.toString().equals("Voir prevention examens")) {
 							dispose();
-							Voir_prevention_examens voir_prev = new Voir_prevention_examens();
-							voir_prev.setVisible(true);
+							new Voir_prevention_examens().setVisible(true);
 						} else if (selected.toString().equals("Planifier examens")) {
 							dispose();
-							Planifier_examens plan_exam = new Planifier_examens();
-							plan_exam.setVisible(true);
+							new Planifier_examens().setVisible(true);
 						}
 					}
 				});
@@ -203,27 +196,20 @@ public class Planifier_examens extends JFrame {
 		contentPane.add(btnNewButton_9);
 		btnNewButton_9.setBounds(680, 113, 177, 23);
 
-		JButton btnNewButton_6 = new JButton("Importer les PVs");
+		JButton btnNewButton_6 = new JButton("Importer les Plannings");
 		btnNewButton_6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				JFileChooser f = new JFileChooser();
+				int reponse = f.showSaveDialog(null);
+				if (reponse == JFileChooser.APPROVE_OPTION) {
+				}
 			}
 		});
-		btnNewButton_6.setBounds(718, 158, 139, 23);
+		btnNewButton_6.setBounds(863, 170, 139, 23);
 		contentPane.add(btnNewButton_6);
-
-		JButton btnNewButton_7 = new JButton("Exporter les PVs");
-		btnNewButton_7.setBounds(890, 158, 151, 23);
-		contentPane.add(btnNewButton_7);
 
 		String[] Filieres = { "2AP1", "2AP2", "GI1", "GC1", "SCM1", "GM1", "GSTR1", "GI2", "GC2", "SCM2", "GM2",
 				"GSTR2", "GI3", "GC3", "SCM3", "GM3", "GSTR3" };
-		JComboBox comboBox = new JComboBox(Filieres);
-		comboBox.setBounds(490, 211, 77, 32);
-		contentPane.add(comboBox);
-
-		JLabel lblNewLabel = new JLabel("Filiere :");
-		lblNewLabel.setBounds(417, 209, 72, 36);
-		contentPane.add(lblNewLabel);
 
 		String column[] = { "Module", "Date", "Horaire", "Professeur", "Salles" };
 
@@ -236,7 +222,7 @@ public class Planifier_examens extends JFrame {
 
 		table = new JTable(data, column);
 		JScrollPane scrollPane1 = new JScrollPane(table);
-		scrollPane1.setBounds(122, 286, 799, 60);
+		scrollPane1.setBounds(114, 260, 799, 60);
 		contentPane.add(scrollPane1);
 
 		JLabel lblNewLabel_1 = new JLabel("A!ecter les \u00E9tudiants aux salles :");
@@ -280,49 +266,58 @@ public class Planifier_examens extends JFrame {
 		contentPane.add(lblNewLabel_13);
 
 		textField = new JTextField();
+		textField.setText("01");
 		textField.setBounds(301, 444, 96, 20);
 		contentPane.add(textField);
 		textField.setColumns(10);
 
 		textField_1 = new JTextField();
+		textField_1.setText("11");
 		textField_1.setBounds(304, 493, 96, 20);
 		contentPane.add(textField_1);
 		textField_1.setColumns(10);
 
 		textField_2 = new JTextField();
+		textField_2.setText("21");
 		textField_2.setBounds(304, 543, 96, 20);
 		contentPane.add(textField_2);
 		textField_2.setColumns(10);
 
 		textField_3 = new JTextField();
+		textField_3.setText("10");
 		textField_3.setBounds(563, 444, 96, 20);
 		contentPane.add(textField_3);
 		textField_3.setColumns(10);
 
 		textField_4 = new JTextField();
+		textField_4.setText("20");
 		textField_4.setBounds(563, 493, 96, 20);
 		contentPane.add(textField_4);
 		textField_4.setColumns(10);
 
 		textField_5 = new JTextField();
+		textField_5.setText("30");
 		textField_5.setBounds(563, 543, 96, 20);
 		contentPane.add(textField_5);
 		textField_5.setColumns(10);
 
-		textField_6 = new JTextField();
-		textField_6.setBounds(801, 444, 96, 20);
-		contentPane.add(textField_6);
-		textField_6.setColumns(10);
+		txtTp = new JTextField();
+		txtTp.setText("TP4");
+		txtTp.setBounds(801, 444, 96, 20);
+		contentPane.add(txtTp);
+		txtTp.setColumns(10);
 
-		textField_7 = new JTextField();
-		textField_7.setBounds(801, 493, 96, 20);
-		contentPane.add(textField_7);
-		textField_7.setColumns(10);
+		txtTp_1 = new JTextField();
+		txtTp_1.setText("TP5");
+		txtTp_1.setBounds(801, 493, 96, 20);
+		contentPane.add(txtTp_1);
+		txtTp_1.setColumns(10);
 
-		textField_8 = new JTextField();
-		textField_8.setBounds(801, 543, 96, 20);
-		contentPane.add(textField_8);
-		textField_8.setColumns(10);
+		txtTp_2 = new JTextField();
+		txtTp_2.setText("TP6");
+		txtTp_2.setBounds(801, 543, 96, 20);
+		contentPane.add(txtTp_2);
+		txtTp_2.setColumns(10);
 
 	}
 }

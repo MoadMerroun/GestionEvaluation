@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -28,6 +29,25 @@ public class Etape2 extends JFrame {
 	Connection conn = DbConnection.connecterbd();
 	PreparedStatement ps = null;
 	ResultSet rs = null;
+
+	public void remplirJlist() {
+		DefaultListModel model = new DefaultListModel();
+		String sql = "SELECT * FROM salles";
+		try {
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				String Id = rs.getString("Id");
+				model.addElement(Id);
+			}
+			list.setModel(model);
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
 
 	/**
 	 * Launch the application.
@@ -86,8 +106,7 @@ public class Etape2 extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Tableau_bord tab = new Tableau_bord();
-				tab.setVisible(true);
+				new Tableau_bord().setVisible(true);
 			}
 		});
 		btnNewButton.setBounds(0, 113, 129, 23);
@@ -129,12 +148,10 @@ public class Etape2 extends JFrame {
 						Object selected = comboBox3.getSelectedItem();
 						if (selected.toString().equals("Voir affectation")) {
 							dispose();
-							Voir_affectation voir_aff = new Voir_affectation();
-							voir_aff.setVisible(true);
+							new Voir_affectation().setVisible(true);
 						} else if (selected.toString().equals("Ajouter une affectation")) {
 							dispose();
-							Ajouter_affectation aj_aff = new Ajouter_affectation();
-							aj_aff.setVisible(true);
+							new Ajouter_affectation().setVisible(true);
 						}
 					}
 				});
@@ -147,8 +164,7 @@ public class Etape2 extends JFrame {
 		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Demande_consultation_copie demande = new Demande_consultation_copie();
-				demande.setVisible(true);
+				new Demande_consultation_copie().setVisible(true);
 			}
 		});
 		btnNewButton_3.setBounds(439, 113, 249, 23);
@@ -158,8 +174,7 @@ public class Etape2 extends JFrame {
 		btnNewButton_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Messagerie mssg = new Messagerie();
-				mssg.setVisible(true);
+				new Messagerie().setVisible(true);
 			}
 		});
 		btnNewButton_4.setBounds(838, 113, 100, 23);
@@ -169,8 +184,7 @@ public class Etape2 extends JFrame {
 		btnNewButton_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Pv_annuel pv = new Pv_annuel();
-				pv.setVisible(true);
+				new Pv_annuel().setVisible(true);
 			}
 		});
 		btnNewButton_5.setBounds(937, 113, 111, 23);
@@ -180,8 +194,7 @@ public class Etape2 extends JFrame {
 		btnNewButton1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Etape2 etape = new Etape2();
-				etape.setVisible(true);
+				new Etape2().setVisible(true);
 			}
 		});
 
@@ -193,12 +206,7 @@ public class Etape2 extends JFrame {
 		lblNewLabel_1.setBounds(523, 225, 111, 28);
 		contentPane.add(lblNewLabel_1);
 
-		String[] salles = { "Salle 001", "Salle 002", "Salle 003", "Salle 004", "Salle 005", "Salle 006", "Salle 101",
-				"Salle 102", "Salle 103", "Salle 104", "Salle 105", "Salle 106", "Salle 201", "Salle 202", "Salle 203",
-				"Salle 204", "Salle 205", "Salle 206",
-		};
-
-		list = new JList(salles);
+		list = new JList();
 		list.setBounds(159, 285, 70, 42);
 		contentPane.add(list);
 
@@ -233,11 +241,7 @@ public class Etape2 extends JFrame {
 					e1.printStackTrace();
 				}
 				dispose();
-				Etape2 etape = new Etape2();
-				etape.setVisible(true);
-				dispose();
-				Voir_affectation voir_aff = new Voir_affectation();
-				voir_aff.setVisible(true);
+				new Voir_affectation().setVisible(true);
 			}
 		});
 		btnNewButton_6.setBounds(439, 370, 129, 43);
@@ -246,7 +250,7 @@ public class Etape2 extends JFrame {
 		JButton btnNewButton_7 = new JButton("Gestion des examens");
 
 		JComboBox comboBox4;
-		String[] exams = { "Voir prevention examens", "Planifier examens" };
+		String[] exams = { "Planifier examens" };
 		comboBox4 = new JComboBox(exams);
 
 		btnNewButton_7.addMouseListener(new MouseAdapter() {
@@ -260,12 +264,10 @@ public class Etape2 extends JFrame {
 						Object selected = comboBox4.getSelectedItem();
 						if (selected.toString().equals("Voir prevention examens")) {
 							dispose();
-							Voir_prevention_examens voir_prev = new Voir_prevention_examens();
-							voir_prev.setVisible(true);
+							new Voir_prevention_examens().setVisible(true);
 						} else if (selected.toString().equals("Planifier examens")) {
 							dispose();
-							Planifier_examens plan_exam = new Planifier_examens();
-							plan_exam.setVisible(true);
+							new Planifier_examens().setVisible(true);
 						}
 					}
 				});
@@ -273,6 +275,6 @@ public class Etape2 extends JFrame {
 		});
 		contentPane.add(btnNewButton_7);
 		btnNewButton_7.setBounds(680, 113, 163, 23);
-
+		remplirJlist();
 	}
 }

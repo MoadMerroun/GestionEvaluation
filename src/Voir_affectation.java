@@ -4,6 +4,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -14,11 +18,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 public class Voir_affectation extends JFrame {
-
+	Connection conn = DbConnection.connecterbd();
+	PreparedStatement ps = null;
+	ResultSet rs = null;
 	private JPanel contentPane;
-	private JTable table;
+	private JTable table = new JTable();;
 
 	/**
 	 * Launch the application.
@@ -40,6 +47,51 @@ public class Voir_affectation extends JFrame {
 	 * Create the frame.
 	 */
 	public Voir_affectation() {
+		DefaultTableModel model = new DefaultTableModel();
+		model.addColumn("Module");
+		model.addColumn("Prof");
+		model.addColumn("Surveillant1");
+		model.addColumn("Surveillant2");
+		model.addColumn("Date_exam");
+		model.addColumn("heure_debut");
+		model.addColumn("heure_fin");
+		model.addColumn("nb_salles");
+		model.addColumn("Salles");
+
+		String sql = "SELECT * FROM ajouter_affectation";
+		try {
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				model.addRow(new Object[] {
+						rs.getString("Module"),
+						rs.getString("Prof"),
+						rs.getString("Surveillant1"),
+						rs.getString("Surveillant2"),
+						rs.getString("Date_exam"),
+						rs.getString("heure_debut"),
+						rs.getString("heure_fin"),
+						rs.getString("nb_salles"),
+						rs.getString("Salles")
+				});
+
+				table.setModel(model);
+				// table.setAutoResizeMode(0);
+				table.getColumnModel().getColumn(0);
+				table.getColumnModel().getColumn(1);
+				table.getColumnModel().getColumn(2);
+				table.getColumnModel().getColumn(3);
+				table.getColumnModel().getColumn(4);
+				table.getColumnModel().getColumn(5);
+				table.getColumnModel().getColumn(6);
+				table.getColumnModel().getColumn(7);
+				table.getColumnModel().getColumn(8);
+			}
+
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1061, 466);
 		contentPane = new JPanel();
@@ -47,19 +99,8 @@ public class Voir_affectation extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		String column[] = { "Module", "Professeur", "Surveillant 1", "Surveillant 2", "Date",
-				"début", "fin", "nombre de salles", "Salle" };
-
-		String data[][] = {
-				{ "Modélisation UML et POO", "Zineb BESRI", "Noureddine OUKASS", "Mohamed CHKOURI", "16/ 11 / 2021",
-						"09:00", "10:00", "3", "salle 204/ salle 205/ salle 206" },
-				{ "Modélisation UML et POO", "Zineb BESRI", "Noureddine OUKASS", "Mohamed CHKOURI", "16/ 11 / 2021",
-						"09:00", "10:00", "3", "salle 204/ salle 205/ salle 206" } };
-
-		table = new JTable(data, column);
-
 		JScrollPane scrollPane1 = new JScrollPane(table);
-		scrollPane1.setBounds(75, 214, 922, 64);
+		scrollPane1.setBounds(10, 214, 1029, 152);
 		contentPane.add(scrollPane1);
 
 		ImageIcon icon = new ImageIcon(Home.class.getResource("/images/logo_Ensate_1.png"));
@@ -92,8 +133,7 @@ public class Voir_affectation extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Tableau_bord tab = new Tableau_bord();
-				tab.setVisible(true);
+				new Tableau_bord().setVisible(true);
 			}
 		});
 		btnNewButton.setBounds(0, 141, 129, 23);
@@ -135,12 +175,10 @@ public class Voir_affectation extends JFrame {
 						Object selected = comboBox3.getSelectedItem();
 						if (selected.toString().equals("Voir affectation")) {
 							dispose();
-							Voir_affectation voir_aff = new Voir_affectation();
-							voir_aff.setVisible(true);
+							new Voir_affectation().setVisible(true);
 						} else if (selected.toString().equals("Ajouter une affectation")) {
 							dispose();
-							Ajouter_affectation aj_aff = new Ajouter_affectation();
-							aj_aff.setVisible(true);
+							new Ajouter_affectation().setVisible(true);
 						}
 					}
 				});
@@ -153,8 +191,7 @@ public class Voir_affectation extends JFrame {
 		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Demande_consultation_copie demande = new Demande_consultation_copie();
-				demande.setVisible(true);
+				new Demande_consultation_copie().setVisible(true);
 			}
 		});
 		btnNewButton_3.setBounds(445, 141, 249, 23);
@@ -164,8 +201,7 @@ public class Voir_affectation extends JFrame {
 		btnNewButton_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Messagerie mssg = new Messagerie();
-				mssg.setVisible(true);
+				new Messagerie().setVisible(true);
 			}
 		});
 		btnNewButton_4.setBounds(832, 141, 100, 23);
@@ -175,8 +211,7 @@ public class Voir_affectation extends JFrame {
 		btnNewButton_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-				Pv_annuel pv = new Pv_annuel();
-				pv.setVisible(true);
+				new Pv_annuel().setVisible(true);
 			}
 		});
 		btnNewButton_5.setBounds(928, 141, 111, 23);
@@ -185,7 +220,7 @@ public class Voir_affectation extends JFrame {
 		JButton btnNewButton_6 = new JButton("Gestion des examens");
 
 		JComboBox comboBox4;
-		String[] exams = { "Voir prevention examens", "Planifier examens" };
+		String[] exams = { "Planifier examens" };
 		comboBox4 = new JComboBox(exams);
 
 		btnNewButton_6.addMouseListener(new MouseAdapter() {
@@ -199,12 +234,10 @@ public class Voir_affectation extends JFrame {
 						Object selected = comboBox4.getSelectedItem();
 						if (selected.toString().equals("Voir prevention examens")) {
 							dispose();
-							Voir_prevention_examens voir_prev = new Voir_prevention_examens();
-							voir_prev.setVisible(true);
+							new Voir_prevention_examens().setVisible(true);
 						} else if (selected.toString().equals("Planifier examens")) {
 							dispose();
-							Planifier_examens plan_exam = new Planifier_examens();
-							plan_exam.setVisible(true);
+							new Planifier_examens().setVisible(true);
 						}
 					}
 				});
