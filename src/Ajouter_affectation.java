@@ -52,8 +52,8 @@ public class Ajouter_affectation extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Ajouter_affectation frame = new Ajouter_affectation();
-					frame.setVisible(true);
+//					Ajouter_affectation frame = new Ajouter_affectation();
+//					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -143,11 +143,10 @@ public class Ajouter_affectation extends JFrame {
 				comboBox3.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						Object selected = comboBox3.getSelectedItem();
+						dispose();
 						if (selected.toString().equals("Voir affectation")) {
-							dispose();
 							new Voir_affectation().setVisible(true);
 						} else if (selected.toString().equals("Ajouter une affectation")) {
-							dispose();
 							new Ajouter_affectation().setVisible(true);
 						}
 					}
@@ -218,6 +217,7 @@ public class Ajouter_affectation extends JFrame {
 		JButton btnNewButton1 = new JButton("Suivant");
 		btnNewButton1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+
 				d = dateChooser.getDate();
 				DateExam = new java.sql.Date(d.getTime());
 				module1 = comboBox_0.getSelectedItem().toString();
@@ -348,11 +348,10 @@ public class Ajouter_affectation extends JFrame {
 				comboBox4.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						Object selected = comboBox4.getSelectedItem();
+						dispose();
 						if (selected.toString().equals("Voir prevention examens")) {
-							dispose();
 							new Voir_prevention_examens().setVisible(true);
 						} else if (selected.toString().equals("Planifier examens")) {
-							dispose();
 							new Planifier_examens().setVisible(true);
 						}
 					}

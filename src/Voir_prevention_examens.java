@@ -24,8 +24,8 @@ public class Voir_prevention_examens extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Voir_prevention_examens frame = new Voir_prevention_examens();
-					frame.setVisible(true);
+//					Voir_prevention_examens frame = new Voir_prevention_examens();
+//					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -110,12 +110,11 @@ public class Voir_prevention_examens extends JFrame {
 				comboBox3.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						Object selected = comboBox3.getSelectedItem();
+						dispose();
 						if (selected.toString().equals("Voir affectation")) {
-							dispose();
 							Voir_affectation voir_aff = new Voir_affectation();
 							voir_aff.setVisible(true);
 						} else if (selected.toString().equals("Ajouter une affectation")) {
-							dispose();
 							Ajouter_affectation aj_aff = new Ajouter_affectation();
 							aj_aff.setVisible(true);
 						}
@@ -174,12 +173,11 @@ public class Voir_prevention_examens extends JFrame {
 				comboBox4.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						Object selected = comboBox4.getSelectedItem();
+						dispose();
 						if (selected.toString().equals("Voir prevention examens")) {
-							dispose();
 							Voir_prevention_examens voir_prev = new Voir_prevention_examens();
 							voir_prev.setVisible(true);
 						} else if (selected.toString().equals("Planifier examens")) {
-							dispose();
 							Planifier_examens plan_exam = new Planifier_examens();
 							plan_exam.setVisible(true);
 						}

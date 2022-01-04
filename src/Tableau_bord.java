@@ -97,8 +97,8 @@ public class Tableau_bord extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Tableau_bord frame = new Tableau_bord();
-					frame.setVisible(true);
+//					Tableau_bord frame = new Tableau_bord();
+//					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -185,11 +185,10 @@ public class Tableau_bord extends JFrame {
 				comboBox3.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						Object selected = comboBox3.getSelectedItem();
+						dispose();
 						if (selected.toString().equals("Voir affectation")) {
-							dispose();
 							new Voir_affectation().setVisible(true);
 						} else if (selected.toString().equals("Ajouter une affectation")) {
-							dispose();
 							new Ajouter_affectation().setVisible(true);
 						}
 					}
@@ -243,11 +242,10 @@ public class Tableau_bord extends JFrame {
 				comboBox4.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						Object selected = comboBox4.getSelectedItem();
+						dispose();
 						if (selected.toString().equals("Voir prevention examens")) {
-							dispose();
 							new Voir_prevention_examens().setVisible(true);
 						} else if (selected.toString().equals("Planifier examens")) {
-							dispose();
 							new Planifier_examens().setVisible(true);
 						}
 					}

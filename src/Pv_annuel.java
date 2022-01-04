@@ -4,7 +4,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -16,9 +23,16 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class Pv_annuel extends JFrame {
-
+	Connection conn = DbConnection.connecterbd();
+	PreparedStatement ps = null;
 	private JPanel contentPane;
 	private JTable table;
 
@@ -29,8 +43,8 @@ public class Pv_annuel extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Pv_annuel frame = new Pv_annuel();
-					frame.setVisible(true);
+//					Pv_annuel frame = new Pv_annuel();
+//					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -118,11 +132,10 @@ public class Pv_annuel extends JFrame {
 				comboBox3.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						Object selected = comboBox3.getSelectedItem();
+						dispose();
 						if (selected.toString().equals("Voir affectation")) {
-							dispose();
 							new Voir_affectation().setVisible(true);
 						} else if (selected.toString().equals("Ajouter une affectation")) {
-							dispose();
 							new Ajouter_affectation().setVisible(true);
 						}
 					}
@@ -165,27 +178,64 @@ public class Pv_annuel extends JFrame {
 		JButton btnNewButton_6 = new JButton("Importer les PVs");
 		btnNewButton_6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				DefaultTableModel ImportDataFromExcelModel = (DefaultTableModel) table.getModel();
+				FileInputStream excelFIS = null;
+				BufferedInputStream excelBIS = null;
+				XSSFWorkbook excelImportWorkBook = null;
 				JFileChooser f = new JFileChooser();
 				int reponse = f.showOpenDialog(null);
 				if (reponse == JFileChooser.APPROVE_OPTION) {
-					File file = new File(f.getSelectedFile().getAbsolutePath());
+					File excelFile = f.getSelectedFile();
+					try {
+						excelFIS = new FileInputStream(excelFile);
+						excelBIS = new BufferedInputStream(excelFIS);
+						excelImportWorkBook = new XSSFWorkbook(excelBIS);
+						XSSFSheet excelSheet = excelImportWorkBook.getSheetAt(0);
+
+						for (int i = 0; i <= excelSheet.getLastRowNum(); i++) {
+							XSSFRow excelRow = excelSheet.getRow(i);
+							XSSFCell cell0 = excelRow.getCell(0);
+							XSSFCell cell1 = excelRow.getCell(1);
+							XSSFCell cell2 = excelRow.getCell(2);
+							XSSFCell cell3 = excelRow.getCell(3);
+							ImportDataFromExcelModel
+									.addRow(new Object[] { cell0, cell1, cell2, cell3 });
+						}
+						int j = table.getRowCount();
+						for (int k = 0; k < j; k++) {
+							String sql = "INSERT INTO pv_annuel_2021 values('"
+									+ ImportDataFromExcelModel.getValueAt(k, 0).toString() + "','"
+									+ ImportDataFromExcelModel.getValueAt(k, 1).toString() + "','"
+									+ ImportDataFromExcelModel.getValueAt(k, 2).toString() + "','"
+									+ ImportDataFromExcelModel.getValueAt(k, 3).toString() + "')";
+							ps = conn.prepareStatement(sql);
+							ps.executeUpdate();
+						}
+
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 
 				}
 			}
 		});
-		btnNewButton_6.setBounds(832, 171, 139, 23);
+		btnNewButton_6.setBounds(816, 171, 155, 41);
 		contentPane.add(btnNewButton_6);
 
-		String[] Filieres = { "2AP1", "2AP2", "GI1", "GC1", "SCM1", "GM1", "GSTR1", "GI2", "GC2", "SCM2", "GM2",
-				"GSTR2", "GI3", "GC3", "SCM3", "GM3", "GSTR3" };
-
-		String column[] = { "Numéro d’apogée", "Nom", "Prénom", "Résultat final" };
-
-		String data[][] = { { "1804330", "Kaddouri", "Karim", "15.0" },
-				{ "188936", "Alaoui", "Hamid", "12.57" }
-		};
-
-		table = new JTable(data, column);
+		table = new JTable();
+		table.setModel(new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+						"Numéro d’apogée", "Nom", "Prénom", "Résultat final"
+				}));
 		JScrollPane scrollPane1 = new JScrollPane(table);
 		scrollPane1.setBounds(110, 259, 873, 60);
 		contentPane.add(scrollPane1);
@@ -205,11 +255,10 @@ public class Pv_annuel extends JFrame {
 				comboBox4.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						Object selected = comboBox4.getSelectedItem();
+						dispose();
 						if (selected.toString().equals("Voir prevention examens")) {
-							dispose();
 							new Voir_prevention_examens().setVisible(true);
 						} else if (selected.toString().equals("Planifier examens")) {
-							dispose();
 							new Planifier_examens().setVisible(true);
 						}
 					}

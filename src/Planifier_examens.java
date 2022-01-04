@@ -4,6 +4,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -14,22 +22,19 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class Planifier_examens extends JFrame {
-
+	Connection conn = DbConnection.connecterbd();
+	PreparedStatement ps = null;
 	private JPanel contentPane;
 	private JTable table;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
-	private JTextField textField_5;
-	private JTextField txtTp;
-	private JTextField txtTp_1;
-	private JTextField txtTp_2;
 
 	/**
 	 * Launch the application.
@@ -38,8 +43,8 @@ public class Planifier_examens extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Planifier_examens frame = new Planifier_examens();
-					frame.setVisible(true);
+//					Planifier_examens frame = new Planifier_examens();
+//					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -123,11 +128,10 @@ public class Planifier_examens extends JFrame {
 				comboBox3.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						Object selected = comboBox3.getSelectedItem();
+						dispose();
 						if (selected.toString().equals("Voir affectation")) {
-							dispose();
 							new Voir_affectation().setVisible(true);
 						} else if (selected.toString().equals("Ajouter une affectation")) {
-							dispose();
 							new Ajouter_affectation().setVisible(true);
 						}
 					}
@@ -182,11 +186,10 @@ public class Planifier_examens extends JFrame {
 				comboBox4.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						Object selected = comboBox4.getSelectedItem();
+						dispose();
 						if (selected.toString().equals("Voir prevention examens")) {
-							dispose();
 							new Voir_prevention_examens().setVisible(true);
 						} else if (selected.toString().equals("Planifier examens")) {
-							dispose();
 							new Planifier_examens().setVisible(true);
 						}
 					}
@@ -199,125 +202,84 @@ public class Planifier_examens extends JFrame {
 		JButton btnNewButton_6 = new JButton("Importer les Plannings");
 		btnNewButton_6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				DefaultTableModel ImportDataFromExcelModel = (DefaultTableModel) table.getModel();
+				FileInputStream excelFIS = null;
+				BufferedInputStream excelBIS = null;
+				XSSFWorkbook excelImportWorkBook = null;
 				JFileChooser f = new JFileChooser();
-				int reponse = f.showSaveDialog(null);
+				int reponse = f.showOpenDialog(null);
 				if (reponse == JFileChooser.APPROVE_OPTION) {
+					File excelFile = f.getSelectedFile();
+					try {
+						excelFIS = new FileInputStream(excelFile);
+						excelBIS = new BufferedInputStream(excelFIS);
+						excelImportWorkBook = new XSSFWorkbook(excelBIS);
+						XSSFSheet excelSheet = excelImportWorkBook.getSheetAt(0);
+
+						for (int i = 0; i <= excelSheet.getLastRowNum(); i++) {
+							XSSFRow excelRow = excelSheet.getRow(i);
+							XSSFCell cell0 = excelRow.getCell(0);
+							XSSFCell cell1 = excelRow.getCell(1);
+							XSSFCell cell2 = excelRow.getCell(2);
+							XSSFCell cell3 = excelRow.getCell(3);
+							XSSFCell cell4 = excelRow.getCell(4);
+							XSSFCell cell5 = excelRow.getCell(5);
+							XSSFCell cell6 = excelRow.getCell(6);
+							XSSFCell cell7 = excelRow.getCell(7);
+							XSSFCell cell8 = excelRow.getCell(8);
+							XSSFCell cell9 = excelRow.getCell(9);
+							XSSFCell cell10 = excelRow.getCell(10);
+							ImportDataFromExcelModel
+									.addRow(new Object[] { cell0, cell1, cell2, cell3, cell4, cell5,
+											cell6, cell7,
+											cell8, cell9, cell10 });
+						}
+						int j = table.getRowCount();
+						for (int k = 0; k < j; k++) {
+							String sql = "INSERT INTO Planning_GI2 values('"
+									+ ImportDataFromExcelModel.getValueAt(k, 0).toString() + "','"
+									+ ImportDataFromExcelModel.getValueAt(k, 1).toString() + "','"
+									+ ImportDataFromExcelModel.getValueAt(k, 2).toString() + "','"
+									+ ImportDataFromExcelModel.getValueAt(k, 3).toString() + "','"
+									+ ImportDataFromExcelModel.getValueAt(k, 4).toString() + "','"
+									+ ImportDataFromExcelModel.getValueAt(k, 5).toString() + "','"
+									+ ImportDataFromExcelModel.getValueAt(k, 6).toString() + "','"
+									+ ImportDataFromExcelModel.getValueAt(k, 7).toString() + "','"
+									+ ImportDataFromExcelModel.getValueAt(k, 8).toString() + "','"
+									+ ImportDataFromExcelModel.getValueAt(k, 9).toString() + "','"
+									+ ImportDataFromExcelModel.getValueAt(k, 10).toString() + "')";
+							ps = conn.prepareStatement(sql);
+							ps.executeUpdate();
+						}
+
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
 				}
 			}
 		});
-		btnNewButton_6.setBounds(863, 170, 139, 23);
+		btnNewButton_6.setBounds(785, 172, 167, 42);
 		contentPane.add(btnNewButton_6);
 
-		String[] Filieres = { "2AP1", "2AP2", "GI1", "GC1", "SCM1", "GM1", "GSTR1", "GI2", "GC2", "SCM2", "GM2",
-				"GSTR2", "GI3", "GC3", "SCM3", "GM3", "GSTR3" };
-
-		String column[] = { "Module", "Date", "Horaire", "Professeur", "Salles" };
-
-		String data[][] = {
-				{ "Modélisation UML et POO", "16/ 11 / 2021", "09:00", "Besri zineb",
-						"salle 204/ salle 205/ salle 206" },
-				{ "Genie logiciel", "22/ 12 / 2021", "09:00", "Chkouri Mohammed",
-						"salle 104/ salle 105/ salle 106" }
-		};
-
-		table = new JTable(data, column);
+		table = new JTable();
+		table.setModel(new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+						"COD_ETU", "CNE", "Nom", "Prenom", "Mod et POO", "Adm BD", "Magt Chai", "Meth Gén", "Vision ar",
+						"Lg et Com2", "Salle contrôle"
+				}));
 		JScrollPane scrollPane1 = new JScrollPane(table);
-		scrollPane1.setBounds(114, 260, 799, 60);
+		scrollPane1.setBounds(45, 290, 977, 136);
 		contentPane.add(scrollPane1);
-
-		JLabel lblNewLabel_1 = new JLabel("A!ecter les \u00E9tudiants aux salles :");
-		lblNewLabel_1.setBounds(124, 370, 300, 32);
-		contentPane.add(lblNewLabel_1);
-
-		JLabel lblNewLabel_2 = new JLabel("De l'etudiant");
-		lblNewLabel_2.setBounds(209, 440, 111, 28);
-		contentPane.add(lblNewLabel_2);
-
-		JLabel lblNewLabel_3 = new JLabel("De l'etudiant");
-		lblNewLabel_3.setBounds(209, 489, 85, 28);
-		contentPane.add(lblNewLabel_3);
-
-		JLabel lblNewLabel_4 = new JLabel("De l'etudiant");
-		lblNewLabel_4.setBounds(209, 537, 85, 32);
-		contentPane.add(lblNewLabel_4);
-
-		JLabel lblNewLabel_5 = new JLabel("\u00E0 l\u2019\u00E9tudiant :");
-		lblNewLabel_5.setBounds(479, 438, 161, 32);
-		contentPane.add(lblNewLabel_5);
-
-		JLabel lblNewLabel_6 = new JLabel("\u00E0 l\u2019\u00E9tudiant :");
-		lblNewLabel_6.setBounds(479, 484, 121, 39);
-		contentPane.add(lblNewLabel_6);
-
-		JLabel lblNewLabel_10 = new JLabel("\u00E0 l\u2019\u00E9tudiant :");
-		lblNewLabel_10.setBounds(479, 542, 100, 23);
-		contentPane.add(lblNewLabel_10);
-
-		JLabel lblNewLabel_11 = new JLabel("la salle :");
-		lblNewLabel_11.setBounds(714, 444, 72, 21);
-		contentPane.add(lblNewLabel_11);
-
-		JLabel lblNewLabel_12 = new JLabel("la salle :");
-		lblNewLabel_12.setBounds(714, 489, 61, 28);
-		contentPane.add(lblNewLabel_12);
-
-		JLabel lblNewLabel_13 = new JLabel("la salle :");
-		lblNewLabel_13.setBounds(714, 542, 72, 23);
-		contentPane.add(lblNewLabel_13);
-
-		textField = new JTextField();
-		textField.setText("01");
-		textField.setBounds(301, 444, 96, 20);
-		contentPane.add(textField);
-		textField.setColumns(10);
-
-		textField_1 = new JTextField();
-		textField_1.setText("11");
-		textField_1.setBounds(304, 493, 96, 20);
-		contentPane.add(textField_1);
-		textField_1.setColumns(10);
-
-		textField_2 = new JTextField();
-		textField_2.setText("21");
-		textField_2.setBounds(304, 543, 96, 20);
-		contentPane.add(textField_2);
-		textField_2.setColumns(10);
-
-		textField_3 = new JTextField();
-		textField_3.setText("10");
-		textField_3.setBounds(563, 444, 96, 20);
-		contentPane.add(textField_3);
-		textField_3.setColumns(10);
-
-		textField_4 = new JTextField();
-		textField_4.setText("20");
-		textField_4.setBounds(563, 493, 96, 20);
-		contentPane.add(textField_4);
-		textField_4.setColumns(10);
-
-		textField_5 = new JTextField();
-		textField_5.setText("30");
-		textField_5.setBounds(563, 543, 96, 20);
-		contentPane.add(textField_5);
-		textField_5.setColumns(10);
-
-		txtTp = new JTextField();
-		txtTp.setText("TP4");
-		txtTp.setBounds(801, 444, 96, 20);
-		contentPane.add(txtTp);
-		txtTp.setColumns(10);
-
-		txtTp_1 = new JTextField();
-		txtTp_1.setText("TP5");
-		txtTp_1.setBounds(801, 493, 96, 20);
-		contentPane.add(txtTp_1);
-		txtTp_1.setColumns(10);
-
-		txtTp_2 = new JTextField();
-		txtTp_2.setText("TP6");
-		txtTp_2.setBounds(801, 543, 96, 20);
-		contentPane.add(txtTp_2);
-		txtTp_2.setColumns(10);
 
 	}
 }

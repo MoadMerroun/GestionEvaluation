@@ -90,11 +90,11 @@ public class Home {
 		frame.getContentPane().add(lblNewLabel_1);
 
 		passwordField = new JPasswordField();
-		passwordField.setBounds(286, 254, 162, 20);
+		passwordField.setBounds(286, 250, 162, 28);
 		frame.getContentPane().add(passwordField);
 
 		textArea = new JTextArea();
-		textArea.setBounds(286, 191, 162, 22);
+		textArea.setBounds(286, 189, 162, 28);
 		frame.getContentPane().add(textArea);
 
 		ImageIcon icon = new ImageIcon(Home.class.getResource("/images/logo_Ensate_1.png"));
